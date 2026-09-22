@@ -1,0 +1,34 @@
+name: Перевірка about.html
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Отримати репозиторій
+        uses: actions/checkout@v4
+
+      - name: Перевірити відсутність div
+        run: |
+          if grep -qi '<div' praktyka/03-rozmitka/about.html; then
+            echo "Помилка: у about.html знайдено <div>"
+            exit 1
+          fi
+
+      - name: Перевірити HTML через W3C
+        run: |
+          out=$(curl -s \
+            -H "Content-Type: text/html; charset=utf-8" \
+            --data-binary @praktyka/03-rozmitka/about.html \
+            "https://validator.w3.org/nu/?out=gnu")
+
+          echo "$out"
+
+          if grep -q ': error:' <<< "$out"; then
+            echo "W3C Validator знайшов помилки."
+            exit 1
+          fi
