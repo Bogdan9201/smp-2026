@@ -9,6 +9,7 @@
     "database": {
       "host": "localhost",
       "port": 5432,
-      "name": "rozklad"
+      "name": "rozklad",
+      "password_env": "DB_PASSWORD"
     }
   }

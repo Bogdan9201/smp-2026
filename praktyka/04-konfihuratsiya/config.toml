@@ -10,3 +10,4 @@ admins = ["olena", "andrii", "maryna"]
 host = "localhost"
 port = 5432
 name = "rozklad"
+password_env = "DB_PASSWORD"
