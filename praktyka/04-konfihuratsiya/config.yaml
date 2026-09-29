@@ -1,7 +1,7 @@
 name: "rozklad-bot"
 version: "1.10"
 debug: false
-port: 8080
+port: 8000
 timeout_seconds: 2.5
 language: "uk"
 admins:
