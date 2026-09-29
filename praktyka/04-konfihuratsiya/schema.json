@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Конфігурація rozklad-bot",
+    "type": "object",
+    "required": ["name", "version", "debug", "port", "timeout_seconds", "language", "admins", "database"],
+    "properties": {
+      "name": {"type": "string", "minLength": 1},
+      "version": {"type": "string", "pattern": "^\\d+\\.\\d+$"},
+      "debug": {"type": "boolean"},
+      "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+      "timeout_seconds": {"type": "number", "exclusiveMinimum": 0},
+      "language": {"type": "string"},
+      "admins": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+      "database": {
+        "type": "object",
+        "required": ["host", "port", "name"],
+        "properties": {
+          "host": {"type": "string"},
+          "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+          "name": {"type": "string"},
+          "password_env": {"type": "string"}
+        }
+      }
+    }
+  }
