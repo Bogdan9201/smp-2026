@@ -1,0 +1,14 @@
+bazovi: &bazovi
+  name: "rozklad-bot"
+  version: "1.10"
+  debug: false
+  port: 8080
+  language: "uk"
+
+rozrobka:
+  <<: *bazovi
+  debug: true
+
+production:
+  <<: *bazovi
+  port: 80
