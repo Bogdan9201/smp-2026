@@ -29,4 +29,4 @@ VYRAZY = {
 }
 
 # Посилання на один збережений вираз на regex101 (додати після збереження):
-# regex101:
+# regex101: https://regex101.com/?regex=%5E%28%3F%3A%5B01%5D%5Cd%7C2%5B0-3%5D%29%3A%5B0-5%5D%5Cd%24&testString=00%3A00%0A12%3A30%0A23%3A59%0A24%3A00%0A23%3A60&flags=gmu&flavor=python&delimiter=%22
