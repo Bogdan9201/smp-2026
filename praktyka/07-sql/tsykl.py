@@ -22,9 +22,10 @@ print(f"Усього клієнтів: {len(klienty)}")
 
 vybrani = []
 for imia, prizvyshche, krayina in klienty:
-    ...  # ← ваш код: умова й append
+    if krayina in ("Poland", "Czech Republic"):
+        vybrani.append((imia, prizvyshche, krayina))
 
-# ← ваш код: сортування за прізвищем
+vybrani.sort(key=lambda k: k[1])
 
 for k in vybrani:
     print(*k)
