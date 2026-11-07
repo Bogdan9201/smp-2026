@@ -102,3 +102,75 @@ LIMIT 5;
 ## 5. Порядок виконання мого запиту
 
 `FROM` + `JOIN` (з'єднуємо чотири таблиці: рядок продажу → трек → альбом → виконавець) → `GROUP BY` (по одній групі на виконавця) → `SELECT` (рахуємо суму `UnitPrice * Quantity` у групі) → `ORDER BY` (від найбільшої суми) → `LIMIT 5`. `WHERE` і `HAVING` тут не потрібні.
+
+---
+
+# Додаткові завдання
+
+## ⭐1. Хіти продажів: 5 жанрів за кількістю проданих штук
+
+```sql
+SELECT g.Name, SUM(il.Quantity) AS prodano
+FROM InvoiceLine il
+JOIN Track t ON il.TrackId = t.TrackId
+JOIN Genre g ON t.GenreId = g.GenreId
+GROUP BY g.GenreId
+ORDER BY prodano DESC
+LIMIT 5;
+```
+
+| Name | prodano |
+|---|---:|
+| Rock | 835 |
+| Latin | 386 |
+| Metal | 264 |
+| Alternative & Punk | 244 |
+| Jazz | 80 |
+
+## ⭐2. Мертвий каталог
+
+```sql
+SELECT COUNT(*) AS ne_kupleno,
+       (SELECT COUNT(*) FROM Track) AS usogo,
+       ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Track), 1) AS vidsotok
+FROM Track t
+LEFT JOIN InvoiceLine il ON il.TrackId = t.TrackId
+WHERE il.InvoiceLineId IS NULL;
+```
+
+Результат: **1519** треків із **3503** жодного разу не купили, це **43,4%** каталогу.
+
+Висновок для магазину: майже половина каталогу не продається, тож варто перевірити, чи її взагалі видно покупцям (пошук, добірки, рекомендації), і не купувати нові ліцензії на схожий матеріал, доки не зрозуміло чому.
+
+## ⭐3. Звіт із Python
+
+Файли `zvit.py` (виконує запит із пункту 7 через `sqlite3`) і `zvit.md` (таблиця «країна · виторг», від найбільшого) лежать поруч.
+
+## ⭐4. Дерево підпорядкування
+
+```sql
+WITH RECURSIVE tree(id, name, lvl, path) AS (
+  SELECT EmployeeId, FirstName || ' ' || LastName, 0, FirstName || ' ' || LastName
+  FROM Employee
+  WHERE ReportsTo IS NULL
+  UNION ALL
+  SELECT e.EmployeeId, e.FirstName || ' ' || e.LastName, tree.lvl + 1,
+         tree.path || ' → ' || e.FirstName || ' ' || e.LastName
+  FROM Employee e
+  JOIN tree ON e.ReportsTo = tree.id
+)
+SELECT lvl, name, path FROM tree ORDER BY path;
+```
+
+| lvl | name | path |
+|---:|---|---|
+| 0 | Andrew Adams | Andrew Adams |
+| 1 | Michael Mitchell | Andrew Adams → Michael Mitchell |
+| 2 | Laura Callahan | Andrew Adams → Michael Mitchell → Laura Callahan |
+| 2 | Robert King | Andrew Adams → Michael Mitchell → Robert King |
+| 1 | Nancy Edwards | Andrew Adams → Nancy Edwards |
+| 2 | Jane Peacock | Andrew Adams → Nancy Edwards → Jane Peacock |
+| 2 | Margaret Park | Andrew Adams → Nancy Edwards → Margaret Park |
+| 2 | Steve Johnson | Andrew Adams → Nancy Edwards → Steve Johnson |
+
+Чому звичайним `JOIN` це не розв'язати: кожен `JOIN` піднімає ланцюжок рівно на один щабель (співробітник → начальник → начальник начальника). Щоб охопити три рівні, треба написати три `JOIN` самої таблиці, для чотирьох — чотири, і так далі, а кількість рівнів потрібно знати наперед. Якщо в компанії з'явиться ще один рівень, запит доведеться переписувати. `WITH RECURSIVE` розв'язує це: спочатку береться корінь (директор, у якого `ReportsTo IS NULL`), а потім крок «додай підлеглих тих, кого вже знайшли» повторюється, доки є нові рядки, тож глибина може бути довільною. У полі `path` на кожному кроці дописується ім'я підлеглого до ланцюжка начальника, звідси «Директор → Менеджер → Агент».
