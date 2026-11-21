@@ -1,20 +1,26 @@
-"""Робота 10: форма реєстрації через PACK.
-
-Запуск:     python praktyka/10-maket/form_pack.py
-Перевірка:  python praktyka/10-maket/perevir.py
-"""
 import tkinter as tk
 
 vikno = tk.Tk()
 vikno.title("Реєстрація — pack")
 
-# Що має бути у формі (README, крок 2):
-#   заголовок «Реєстрація»;
-#   чотири підписи з полями: Імʼя, Пошта, Телефон, Пароль — поле пароля з show="•";
-#   прапорець «Погоджуюсь з умовами»;
-#   кнопки «Зареєструватись» і «Скасувати» — внизу праворуч.
-# Тут — ЛИШЕ pack. Рядок «підпис + поле» зручно зробити окремою tk.Frame, усередині — теж pack.
+tk.Label(vikno, text="Реєстрація", font=("TkDefaultFont", 14, "bold")).pack(pady=8)
 
-# ← ваш код
+POLIA = [("Імʼя:", ""), ("Пошта:", ""), ("Телефон:", ""), ("Пароль:", "•")]
+for pidpys, show in POLIA:
+    ryadok = tk.Frame(vikno)
+    ryadok.pack(fill="x", padx=10, pady=2)
+    tk.Label(ryadok, text=pidpys, width=10, anchor="e").pack(side="left")
+    tk.Entry(ryadok, show=show).pack(side="left", fill="x", expand=True)
+
+# прапорець: рамка з відступом, що дорівнює ширині підпису
+ryadok = tk.Frame(vikno)
+ryadok.pack(fill="x", padx=10, pady=2)
+tk.Label(ryadok, width=10).pack(side="left")
+tk.Checkbutton(ryadok, text="Погоджуюсь з умовами").pack(side="left")
+
+knopky = tk.Frame(vikno)
+knopky.pack(fill="x", padx=10, pady=8)
+tk.Button(knopky, text="Скасувати").pack(side="right", padx=(6, 0))
+tk.Button(knopky, text="Зареєструватись").pack(side="right")
 
 vikno.mainloop()
