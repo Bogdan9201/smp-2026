@@ -1,0 +1,7 @@
+zaholovok: Замовлення
+polia:
+  - {pidpys: Імʼя, typ: tekst}
+  - {pidpys: Пароль, typ: parol}
+  - {pidpys: Кількість, typ: chyslo}
+praporci: [Терміново]
+knopky: [Надіслати, Скасувати]

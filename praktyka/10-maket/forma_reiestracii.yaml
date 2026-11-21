@@ -1,0 +1,8 @@
+zaholovok: Реєстрація
+polia:
+  - {pidpys: Імʼя, typ: tekst}
+  - {pidpys: Пошта, typ: tekst}
+  - {pidpys: Телефон, typ: tekst}
+  - {pidpys: Пароль, typ: parol}
+praporci: [Погоджуюсь з умовами]
+knopky: [Зареєструватись, Скасувати]
